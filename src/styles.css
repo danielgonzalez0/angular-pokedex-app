@@ -1,1 +1,64 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+li {
+  list-style: none;
+}
+
+body {
+  margin: 1rem 1.5rem;
+}
+
+header {
+  background-color: rgb(33, 182, 72);
+  text-align: center;
+  color: white;
+  margin-bottom: 1rem;
+}
+header h1 {
+  padding: 10px 0;
+}
+
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pokemon-item {
+  display: flex;
+  background-color: rgb(242, 242, 242);
+  border: solid 1px rgb(203, 203, 203);
+    border-radius: 15px;
+  padding: 1rem;
+}
+
+.pokemon-item p {
+margin-top: 0.25rem;
+}
+.pokemon-item-img{
+  width: 120px;
+}
+
+.pokemon-item-img img {
+  width: 100%;
+}
+
+button {
+  background-color: rgb(168, 174, 169);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  margin-right: 0.25rem;
+  border-radius: 10px;
+}
+
+button:hover {
+  background-color: rgb(33, 182, 72);
+}

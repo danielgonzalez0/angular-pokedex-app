@@ -33,15 +33,20 @@ header h1 {
   display: flex;
   background-color: rgb(242, 242, 242);
   border: solid 1px rgb(203, 203, 203);
-    border-radius: 15px;
+  border-radius: 15px;
   padding: 1rem;
 }
 
 .pokemon-item p {
-margin-top: 0.25rem;
+  margin-top: 0.25rem;
 }
-.pokemon-item-img{
+.pokemon-item-img {
   width: 120px;
+}
+
+.pokemon-item-content {
+  padding: 1rem;
+  width: 200px;
 }
 
 .pokemon-item-img img {

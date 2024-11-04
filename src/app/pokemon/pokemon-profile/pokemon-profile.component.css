@@ -80,9 +80,7 @@ span {
   padding: 10px 5px;
   border: none;
   border-radius: 5px;
-   max-width: 100px;
-
-  
+  max-width: 100px;
 }
 
 .btn-container .btn-link:hover {

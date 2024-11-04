@@ -28,7 +28,7 @@
     </table>
     <div class="btn-container">
       <button class="btn-link" routerLink="/pokemons">RETOUR</button>
-      <button class="btn-link">EDITER</button>
+      <button class="btn-link" [routerLink]="['/pokemons/edit', pokemon().id]">EDITER</button>
       <button class="btn-link">SUPPRIMER</button>
 
     </div>

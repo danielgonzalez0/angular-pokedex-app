@@ -1,47 +1,7 @@
 <header>
-  <h1>Pokedex</h1>
+  <h1>
+    <a routerLink="/pokemons">Pokédex</a>
+  </h1>
 </header>
 
-<p>signal compteur : {{ count.call() }}</p>
-<button (click)="increment()">+</button>
-<button (click)="decrement()">-</button>
-
-<form class="form-container">
-  <div class="form-group">
-    <label for="search" class="form-label"> Rechercher un pokemon </label>
-    <input
-      type="text"
-      id="search"
-      name="searchTerm"
-      class="form-control"
-      placeholder="Rechercher un pokemon"
-      #searchField
-      [value]="searchTerm()"
-      (input)="searchTerm.set(searchField.value)"
-    />
-  </div>
-</form>
-
-<ul class="pokemon-list">
-  @for(pokemon of filteredPokemonList(); track pokemon.id){
-  <li class="pokemon-item" appPokemonBorder [pokemonType]="pokemon.types[0]">
-    <div class="pokemon-item-img">
-      <img [src]="pokemon.picture" [alt]="pokemon.name" />
-    </div>
-    <div class="pokemon-item-content">
-      <h2>{{ pokemon.name }}</h2>
-      <p>Taille : {{ size(pokemon) }}</p>
-      <p>{{ pokemon.created | date : "dd/MM/yyyy" }}</p>
-      <p>Point de vie : {{ pokemon.life }}</p>
-      <button (click)="incrementLife(pokemon)" [disabled]="pokemon.life >= 30">
-        +
-      </button>
-      <button (click)="decrementeLife(pokemon)" [disabled]="pokemon.life <= 10">
-        -
-      </button>
-    </div>
-  </li>
-  }@empty {
-  <p>Pas de pokemons dans le pokedex</p>
-  }
-</ul>
+<router-outlet></router-outlet>

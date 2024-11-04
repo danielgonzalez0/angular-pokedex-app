@@ -1,0 +1,25 @@
+.container{
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+h2{
+  text-align: center;
+  font-size: 2em;
+}
+
+a{
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  color: #007bff;
+  padding: 10px;
+  font-size: large;
+  font-weight: bold;
+}
+
+a:hover{
+  color: brown;
+}

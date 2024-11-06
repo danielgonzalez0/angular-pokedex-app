@@ -81,7 +81,7 @@ h2 {
 
 .input-container-controllers .btn {
   width: 35px;
-  padding: 8px    5px;
+  padding: 8px 5px;
 }
 
 .input-container-controllers input {
@@ -138,7 +138,7 @@ input[type="number"] {
   flex: 1 1 30%;
 }
 
-.btn-span{
+.btn-span {
   display: flex;
   justify-content: space-between;
   gap: 5px;
@@ -150,7 +150,7 @@ input[type="number"] {
   font-size: 0.8em;
 }
 
-.selected-types-list{
+.selected-types-list {
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
@@ -162,7 +162,23 @@ input[type="number"] {
   flex-wrap: wrap;
 }
 
-.form-check-input:checked, 
+.form-check-input:checked,
 .form-check-input:checked ~ .form-check-label {
-  opacity: 0.50;
+  opacity: 0.5;
+}
+
+.is-invalid {
+  border: 2px solid red;
+}
+
+.invalid-feedback,
+.alert-danger,
+.text-danger {
+  color: red;
+  font-size: 1em;
+}
+
+.alert-danger{
+  margin-top: 10px;
+  text-align: center;
 }

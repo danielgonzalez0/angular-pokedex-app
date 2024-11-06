@@ -6,9 +6,10 @@ import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
+  Validators,
 } from '@angular/forms';
 import { JsonPipe, NgStyle } from '@angular/common';
-import { getPokemonColor } from '../../models/pokemon.model';
+import { getPokemonColor, POKEMON_RULES } from '../../models/pokemon.model';
 
 @Component({
   selector: 'app-pokemon-edit',
@@ -24,24 +25,47 @@ export class PokemonEditComponent {
   readonly pokemon = signal(
     this.pokemonService.getPokemon(this.pokemonId)
   ).asReadonly();
+  readonly POKEMON_RULES = signal(POKEMON_RULES).asReadonly();
 
   //instanciation du formulaire
   readonly form = new FormGroup({
-    name: new FormControl(this.pokemon().name),
+    name: new FormControl(this.pokemon().name, [
+      Validators.required,
+      Validators.minLength(POKEMON_RULES.MIN_NAME),
+      Validators.maxLength(POKEMON_RULES.MAX_NAME),
+      Validators.pattern(POKEMON_RULES.NAME_PATTERN),
+    ]),
+
     life: new FormControl(this.pokemon().life),
     damage: new FormControl(this.pokemon().damage),
     types: new FormArray(
-      this.pokemon().types.map((type) => new FormControl(type))
+      this.pokemon().types.map((type) => new FormControl(type)),
+      [Validators.required, Validators.maxLength(POKEMON_RULES.MAX_TYPES)]
     ),
   });
 
-  //form array pour les types
+  //validation du formulaire
+  get pokemonName(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+  get pokemonLife(): FormControl {
+    return this.form.get('life') as FormControl;
+  }
 
+  get pokemonDamage(): FormControl {
+    return this.form.get('damage') as FormControl;
+  }
+
+  //form array pour les types
   /**
    * return the selected pokemon types
    */
   get pokemonTypeList(): FormArray {
     return this.form.get('types') as FormArray;
+  }
+
+  get PokemonTypeListSelected(): number {
+    return this.pokemonTypeList.controls.length;
   }
 
   /**
@@ -66,6 +90,7 @@ export class PokemonEditComponent {
         .indexOf(type);
       this.pokemonTypeList.removeAt(index);
     }
+    console.log(this.PokemonTypeListSelected);
   }
 
   /**
@@ -94,7 +119,8 @@ export class PokemonEditComponent {
   }
 
   onSubmit() {
-    console.log(this.form.value);
+    if (this.form.valid) {
+      console.log(this.form.value);
+    }
   }
 }
-

@@ -1,4 +1,10 @@
-@if(pokemon(); as pokemon){
+@if(loading()) {
+<div class="loader-wrapper">
+  <span class="loader"></span>
+</div>
+} @if(error()){
+<app-page-not-found />
+} @if(pokemon(); as pokemon){
 <div class="container">
   <img [src]="pokemon.picture" [alt]="pokemon.name" />
   <div class="card-body">
@@ -17,7 +23,14 @@
           <th>Types</th>
           <td class="span-container">
             @for(type of pokemon.types; track type){
-            <span class="checkbox">{{ type }}</span>
+            <span
+              class="checkbox"
+              [ngStyle]="{
+                backgroundColor: getPokemonColor(type!),
+                color: type === 'Electrik' ? 'black' : 'white'
+              }"
+              >{{ type }}</span
+            >
             }
           </td>
         </tr>
@@ -32,12 +45,10 @@
       <button class="btn-link" [routerLink]="['/pokemons/edit', pokemon.id]">
         EDITER
       </button>
-      <button class="btn-link">SUPPRIMER</button>
+      <button class="btn-link" (click)="deletePokemon(pokemon.id)">
+        SUPPRIMER
+      </button>
     </div>
   </div>
-</div>
-} @else {
-<div class="loader-wrapper">
-  <span class="loader"></span>
 </div>
 }

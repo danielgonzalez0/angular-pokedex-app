@@ -1,5 +1,5 @@
-import { Component, effect, inject, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import {
   FormArray,
@@ -9,21 +9,52 @@ import {
   Validators,
 } from '@angular/forms';
 import { JsonPipe, NgStyle } from '@angular/common';
-import { getPokemonColor, Pokemon, POKEMON_RULES } from '../../models/pokemon.model';
+import {
+  getPokemonColor,
+  Pokemon,
+  POKEMON_RULES,
+} from '../../models/pokemon.model';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { catchError, map, of } from 'rxjs';
+import { PageNotFoundComponent } from '../../page-not-found/page-not-found.component';
 
 @Component({
   selector: 'app-pokemon-edit',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, JsonPipe, NgStyle],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    JsonPipe,
+    NgStyle,
+    PageNotFoundComponent,
+  ],
   templateUrl: './pokemon-edit.component.html',
   styleUrl: './pokemon-edit.component.css',
 })
 export class PokemonEditComponent {
   readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
   readonly pokemonService = inject(PokemonService);
   readonly pokemonId = Number(this.route.snapshot.paramMap.get('id'));
-  readonly pokemon = toSignal(this.pokemonService.getPokemon(this.pokemonId));
+  private readonly pokemonResponse = toSignal(
+    this.pokemonService.getPokemon(this.pokemonId).pipe(
+      map((value) => ({ value, error: undefined })),
+      catchError((error) => of({ value: undefined, error }))
+    )
+  );
+
+  // En attente de la réponse HTTP
+
+  readonly loading = computed(() => !this.pokemonResponse());
+
+  // Cas d'erreur HTTP
+
+  readonly error = computed(() => this.pokemonResponse()?.error);
+
+  // Cas de succès HTTP
+
+  readonly pokemon = computed(() => this.pokemonResponse()?.value);
+
   readonly POKEMON_RULES = signal(POKEMON_RULES).asReadonly();
 
   //instanciation du formulaire
@@ -136,8 +167,21 @@ export class PokemonEditComponent {
   }
 
   onSubmit() {
-    if (this.form.valid) {
-      console.log(this.form.value);
+    const isFormValid = this.form.valid;
+    const pokemon = this.pokemon();
+
+    if (isFormValid && pokemon) {
+      const updatedPokemon: Pokemon = {
+        ...pokemon,
+        name: this.pokemonName.value as string,
+        life: this.pokemonLife.value,
+        damage: this.pokemonDamage.value,
+        types: this.pokemonTypeList.value,
+      };
+
+      this.pokemonService.updatePokemon(updatedPokemon).subscribe(() => {
+        this.router.navigate(['/pokemons', this.pokemonId]);
+      });
     }
   }
 }

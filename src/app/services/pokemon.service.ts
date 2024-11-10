@@ -15,9 +15,18 @@ export class PokemonService {
   }
 
   getPokemon(pokemonId: number): Observable<Pokemon> {
-    const url = this.http.get<Pokemon>(`${this.POKEMON_API_URL}/${pokemonId}`);
-    console.log('url', url);
     return this.http.get<Pokemon>(`${this.POKEMON_API_URL}/${pokemonId}`);
+  }
+
+  updatePokemon(pokemon: Pokemon): Observable<Pokemon> {
+    return this.http.put<Pokemon>(
+      `${this.POKEMON_API_URL}/${pokemon.id}`,
+      pokemon
+    );
+  }
+
+  deletePokemon(pokemonId: number): Observable<void> {
+    return this.http.delete<void>(`${this.POKEMON_API_URL}/${pokemonId}`);
   }
 
   // getPokemon(pokemonId: number): Pokemon {

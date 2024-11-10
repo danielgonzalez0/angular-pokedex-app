@@ -1,4 +1,10 @@
-@if(pokemon(); as pokemon){
+@if(loading()) {
+<div class="loader-wrapper">
+  <span class="loader"></span>
+</div>
+} @if(error()){
+<app-page-not-found />
+} @if(pokemon(); as pokemon){
 <div class="container">
   <img [src]="pokemon.picture" [alt]="pokemon.name" />
   <div class="card-body">
@@ -155,11 +161,7 @@
 <div class="alert alert-danger">
   Veuillez corriger les erreurs avant de sauvegarder le Pokémon.
 </div>
-}}@else {
-<div class="loader-wrapper">
-  <span class="loader"></span>
-</div>
-}
+}}
 
 <pre>{{ form.value | json }}</pre>
 {{ pokemonTypeList.errors | json }}

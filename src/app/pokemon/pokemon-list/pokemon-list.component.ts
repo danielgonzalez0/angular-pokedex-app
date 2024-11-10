@@ -5,6 +5,7 @@ import { CreateSignal } from '../../utils/CreateSignal';
 import { DatePipe } from '@angular/common';
 import { PokemonBorderDirective } from '../../directives/pokemon-border.directive';
 import { RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -14,9 +15,11 @@ import { RouterLink } from '@angular/router';
   styleUrl: './pokemon-list.component.css',
 })
 export class PokemonListComponent {
-  private readonly pokemonService = inject(PokemonService);
+  readonly pokemonService = inject(PokemonService);
+  readonly pokemonList = toSignal(this.pokemonService.getPokemonList());
+  readonly loading = computed(() => !this.pokemonList());
+
   readonly searchTerm = signal<string>('');
-  pokemonList = signal<PokemonList>(this.pokemonService.getPokemonList());
   filteredPokemonList = computed<PokemonList>(() => this.filterPokemonList());
   count = new CreateSignal(0);
 
@@ -58,12 +61,14 @@ export class PokemonListComponent {
   }
 
   filterPokemonList(): PokemonList {
+    if (!this.pokemonList()) return [];
+
     if (this.searchTermCase() === '') {
-      return this.pokemonList();
+      return this.pokemonList() as PokemonList;
     } else {
-      return this.pokemonList().filter((pokemon) =>
+      return this.pokemonList()?.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(this.searchTermCase())
-      );
+      ) as PokemonList;
     }
   }
 }

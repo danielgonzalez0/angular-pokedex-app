@@ -59,7 +59,7 @@ td {
   gap: 5px;
 }
 
-span {
+.checkbox {
   padding: 2.5px 10px;
   border-radius: 20px;
   background-color: rgb(108, 108, 108);

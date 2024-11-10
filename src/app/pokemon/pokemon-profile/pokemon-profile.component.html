@@ -1,36 +1,43 @@
+@if(pokemon(); as pokemon){
 <div class="container">
-  <img [src]="pokemon().picture" [alt]="pokemon().name" />
+  <img [src]="pokemon.picture" [alt]="pokemon.name" />
   <div class="card-body">
-    <h2>{{ pokemon().name }}</h2>
+    <h2>{{ pokemon.name }}</h2>
     <table>
       <tbody>
         <tr>
           <th>Points de vie</th>
-          <td>{{ pokemon().life }}</td>
+          <td>{{ pokemon.life }}</td>
         </tr>
         <tr>
           <th>Dégâts</th>
-          <td>{{ pokemon().damage }}</td>
+          <td>{{ pokemon.damage }}</td>
         </tr>
         <tr>
           <th>Types</th>
           <td class="span-container">
-            @for(type of pokemon().types; track type){
-            <span>{{ type }}</span>
+            @for(type of pokemon.types; track type){
+            <span class="checkbox">{{ type }}</span>
             }
           </td>
         </tr>
         <tr>
           <th>Date de création</th>
-          <td>{{ pokemon().created | date : "dd/MM/yyyy" }}</td>
+          <td>{{ pokemon.created | date : "dd/MM/yyyy" }}</td>
         </tr>
       </tbody>
     </table>
     <div class="btn-container">
       <button class="btn-link" routerLink="/pokemons">RETOUR</button>
-      <button class="btn-link" [routerLink]="['/pokemons/edit', pokemon().id]">EDITER</button>
+      <button class="btn-link" [routerLink]="['/pokemons/edit', pokemon.id]">
+        EDITER
+      </button>
       <button class="btn-link">SUPPRIMER</button>
-
     </div>
   </div>
 </div>
+} @else {
+<div class="loader-wrapper">
+  <span class="loader"></span>
+</div>
+}

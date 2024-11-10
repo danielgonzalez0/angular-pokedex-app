@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import {
@@ -9,7 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { JsonPipe, NgStyle } from '@angular/common';
-import { getPokemonColor, POKEMON_RULES } from '../../models/pokemon.model';
+import { getPokemonColor, Pokemon, POKEMON_RULES } from '../../models/pokemon.model';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pokemon-edit',
@@ -22,27 +23,43 @@ export class PokemonEditComponent {
   readonly route = inject(ActivatedRoute);
   readonly pokemonService = inject(PokemonService);
   readonly pokemonId = Number(this.route.snapshot.paramMap.get('id'));
-  readonly pokemon = signal(
-    this.pokemonService.getPokemon(this.pokemonId)
-  ).asReadonly();
+  readonly pokemon = toSignal(this.pokemonService.getPokemon(this.pokemonId));
   readonly POKEMON_RULES = signal(POKEMON_RULES).asReadonly();
 
   //instanciation du formulaire
   readonly form = new FormGroup({
-    name: new FormControl(this.pokemon().name, [
+    name: new FormControl('', [
       Validators.required,
       Validators.minLength(POKEMON_RULES.MIN_NAME),
       Validators.maxLength(POKEMON_RULES.MAX_NAME),
       Validators.pattern(POKEMON_RULES.NAME_PATTERN),
     ]),
 
-    life: new FormControl(this.pokemon().life),
-    damage: new FormControl(this.pokemon().damage),
+    life: new FormControl(),
+    damage: new FormControl(),
     types: new FormArray(
-      this.pokemon().types.map((type) => new FormControl(type)),
+      [],
       [Validators.required, Validators.maxLength(POKEMON_RULES.MAX_TYPES)]
     ),
   });
+
+  constructor() {
+    //fn qui se déclenche une fois à la réponse req http
+    effect(() => {
+      const pokemon = this.pokemon();
+      if (pokemon) {
+        this.form.patchValue({
+          name: pokemon.name,
+          life: pokemon.life,
+          damage: pokemon.damage,
+        });
+        pokemon.types.forEach((type) => {
+          //Form array vide et on lui passe des formControls pour chaque type
+          this.pokemonTypeList.push(new FormControl(type));
+        });
+      }
+    });
+  }
 
   //validation du formulaire
   get pokemonName(): FormControl {

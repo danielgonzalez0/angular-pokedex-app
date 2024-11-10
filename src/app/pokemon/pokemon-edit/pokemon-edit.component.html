@@ -1,7 +1,8 @@
+@if(pokemon(); as pokemon){
 <div class="container">
-  <img [src]="pokemon().picture" [alt]="pokemon().name" />
+  <img [src]="pokemon.picture" [alt]="pokemon.name" />
   <div class="card-body">
-    <h2>{{ pokemon().name }}</h2>
+    <h2>{{ pokemon.name }}</h2>
     <form class="form-container" [formGroup]="form" (ngSubmit)="onSubmit()">
       <fieldset class="input-container">
         <label for="name">Name</label>
@@ -127,7 +128,9 @@
                 #checkbox
                 [checked]="isPokemonTypeSelected(type)"
                 (change)="onPokemonTypeChange(type, checkbox.checked)"
-                [disabled]="PokemonTypeListSelected >= POKEMON_RULES().MAX_TYPES"
+                [disabled]="
+                  PokemonTypeListSelected >= POKEMON_RULES().MAX_TYPES
+                "
                 [value]="type"
                 [id]="type"
               />
@@ -140,7 +143,7 @@
         </div>
       </fieldset>
       <div class="btn-container">
-        <button class="btn-link" [routerLink]="['/pokemons/', pokemon().id]">
+        <button class="btn-link" [routerLink]="['/pokemons/', pokemon.id]">
           RETOUR
         </button>
         <button type="submit" class="btn-link">SAUVEGARDER</button>
@@ -151,6 +154,10 @@
 @if(form.invalid) {
 <div class="alert alert-danger">
   Veuillez corriger les erreurs avant de sauvegarder le Pokémon.
+</div>
+}}@else {
+<div class="loader-wrapper">
+  <span class="loader"></span>
 </div>
 }
 

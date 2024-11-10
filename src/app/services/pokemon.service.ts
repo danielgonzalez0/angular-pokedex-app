@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { POKEMON_LIST } from '../data/pokemon-list.fake';
 import { Pokemon, PokemonList } from '../models/pokemon.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,13 +14,19 @@ export class PokemonService {
     return this.http.get<PokemonList>(this.POKEMON_API_URL);
   }
 
-  getPokemon(pokemonId: number): Pokemon {
-    const pokemon = POKEMON_LIST.find((pokemon) => pokemon.id === pokemonId);
-    if (!pokemon) {
-      throw new Error(`no pokemon found with id ${pokemonId}`);
-    }
-    return pokemon;
+  getPokemon(pokemonId: number): Observable<Pokemon> {
+    const url = this.http.get<Pokemon>(`${this.POKEMON_API_URL}/${pokemonId}`);
+    console.log('url', url);
+    return this.http.get<Pokemon>(`${this.POKEMON_API_URL}/${pokemonId}`);
   }
+
+  // getPokemon(pokemonId: number): Pokemon {
+  //   const pokemon = POKEMON_LIST.find((pokemon) => pokemon.id === pokemonId);
+  //   if (!pokemon) {
+  //     throw new Error(`no pokemon found with id ${pokemonId}`);
+  //   }
+  //   return pokemon;
+  // }
 
   getPokemonTypes(): string[] {
     return [

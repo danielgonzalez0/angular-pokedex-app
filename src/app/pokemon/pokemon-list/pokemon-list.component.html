@@ -18,10 +18,13 @@
   </div>
 </form>
 
-<ul class="pokemon-list">
-  @if(loading()){
+@if(loading()){
+<div class="loader-wrapper">
   <span class="loader"></span>
-  } @for(pokemon of filteredPokemonList(); track pokemon.id){
+</div>
+}
+<ul class="pokemon-list">
+  @for(pokemon of filteredPokemonList(); track pokemon.id){
   <li class="pokemon-item" appPokemonBorder [pokemonType]="pokemon.types[0]">
     <div class="pokemon-item-img">
       <img [src]="pokemon.picture" [alt]="pokemon.name" />
@@ -50,7 +53,7 @@
       </div>
     </div>
   </li>
-  }@empty {
+  }@empty { @if(!loading()){
   <p>Pas de pokemons dans le pokedex</p>
-  }
+  }}
 </ul>

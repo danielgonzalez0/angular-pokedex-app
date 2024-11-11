@@ -5,20 +5,37 @@ import { PokemonProfileComponent } from './pokemon/pokemon-profile/pokemon-profi
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { PokemonEditComponent } from './pokemon/pokemon-edit/pokemon-edit.component';
 import { provideHttpClient } from '@angular/common/http';
+import { authGuard } from './core/auth/auth.guard';
+import { LoginComponent } from './login/login.component';
 
 // 👇
 const routes: Routes = [
   {
-    path: 'pokemons/edit/:id',
-    component: PokemonEditComponent,
-    title: 'Pokémon',
+    path:'login',
+    component: LoginComponent,
+    title: 'page de connexion'
   },
   {
-    path: 'pokemons/:id',
-    component: PokemonProfileComponent,
-    title: 'Pokemon',
+    path: 'pokemons',
+    canActivateChild: [authGuard],
+    children: [
+      {
+        path: '',
+        component: PokemonListComponent,
+        title: 'Pokedex',
+      },
+      {
+        path: 'edit/:id',
+        component: PokemonEditComponent,
+        title: 'Pokémon',
+      },
+      {
+        path: ':id',
+        component: PokemonProfileComponent,
+        title: 'Pokemon',
+      },
+    ],
   },
-  { path: 'pokemons', component: PokemonListComponent, title: 'Pokedex' },
   { path: '', redirectTo: '/pokemons', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent, title: 'Page not found' },
 ];

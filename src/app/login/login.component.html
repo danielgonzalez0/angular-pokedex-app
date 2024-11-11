@@ -1,0 +1,39 @@
+<div class="wrapper">
+  <div class="login-container">
+    <h3>Page de connexion</h3>
+    <p class="info">{{ message() }}</p>
+    <form (submit)="onSubmit($event)">
+      <fieldset>
+        <label for="name" class="form-label">Nom</label>
+        <input
+          #nameField
+          id="name"
+          type="text"
+          name="name"
+          class="form-control"
+          autocomplete="username"
+          [value]="name()"
+          (input)="name.set(nameField.value)"
+          required
+        />
+      </fieldset>
+      <fieldset>
+        <label for="password" class="form-label">Mot de passe</label>
+        <input
+          #passwordField
+          id="password"
+          type="password"
+          name="password"
+          class="form-control"
+          autocomplete="current-password"
+          [value]="password()"
+          (input)="password.set(passwordField.value)"
+          required
+        />
+      </fieldset>
+      <div class="button-container">
+        <button type="submit" class="btn">Se connecter</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,15 +1,16 @@
-@if(loading()) {
-<div class="loader-wrapper">
-  <span class="loader"></span>
-</div>
-} @if(error()){
-<app-page-not-found />
-} @if(pokemon(); as pokemon){
 <div class="container">
-  <img [src]="pokemon.picture" [alt]="pokemon.name" />
+  <img
+    [src]="updatePicture ? updatePicture : DEFAULT_IMG"
+    [alt]="'image du pokemon'"
+  />
   <div class="card-body">
-    <h2>{{ pokemon.name }}</h2>
-    <form class="form-container" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <h2>Ajouter un pokemon</h2>
+    <form
+      class="form-container"
+      [formGroup]="pokemonForm"
+      (ngSubmit)="onSubmit()"
+    >
+      <!-- formgroup name -->
       <fieldset class="input-container">
         <label for="name">Nom</label>
         <input
@@ -18,9 +19,13 @@
           name="name"
           placeholder="Nom du pokemon"
           formControlName="name"
-          [class.is-invalid]="pokemonName.invalid"
+          [class.is-invalid]="
+            pokemonName.invalid &&
+            (pokemonName.touched || pokemonName.dirty || isSubmit)
+          "
         />
       </fieldset>
+      @if(pokemonName.invalid && (pokemonName.touched || isSubmit)) {
       @if(pokemonName.hasError('required')) {
       <div class="invalid-feedback">Veuillez renseigner ce champ.</div>
       } @if(pokemonName.hasError('minlength')) {
@@ -37,7 +42,27 @@
       <div class="invalid-feedback">
         Veuillez saisir uniquement des lettres.
       </div>
-      }
+      } }
+      <!-- formgroup image -->
+      <fieldset class="input-container">
+        <label for="picture">Image</label>
+        <input
+          type="text"
+          id="picture"
+          name="picture"
+          placeholder="url image du pokemon"
+          formControlName="picture"
+          [class.is-invalid]="
+            pokemonPicture.invalid &&
+            (pokemonPicture.touched || pokemonPicture.dirty || isSubmit)
+          "
+        />
+      </fieldset>
+      @if(pokemonPicture.invalid && (pokemonPicture.touched || isSubmit)) {
+      @if(pokemonPicture.hasError('required')) {
+      <div class="invalid-feedback">Veuillez renseigner ce champ.</div>
+      } }
+      <!-- formgroup life -->
       <fieldset class="input-container">
         <label for="life">Points de vie</label>
         <div class="input-container-controllers">
@@ -66,8 +91,9 @@
           </button>
         </div>
       </fieldset>
+      <!-- formgroup damage -->
       <fieldset class="input-container">
-        <label for="damage">Dégâts</label>
+        <label for="life">Dégâts</label>
         <div class="input-container-controllers">
           <button
             class="btn"
@@ -94,6 +120,7 @@
           </button>
         </div>
       </fieldset>
+      <!-- formArray types -->
       <fieldset class="input-container">
         <h3>types</h3>
         <div class="types-container">
@@ -148,20 +175,21 @@
           </div>
         </div>
       </fieldset>
+      <!-- button container -->
       <div class="btn-container">
-        <button class="btn-link" [routerLink]="['/pokemons/', pokemon.id]">
-          RETOUR
+        <button class="btn-link" [routerLink]="['/pokemons/']">ANNULER</button>
+        <button type="submit" class="btn-link">
+          SAUVEGARDER LES CHANGEMENTS
         </button>
-        <button type="submit" class="btn-link">SAUVEGARDER</button>
       </div>
     </form>
   </div>
 </div>
-@if(form.invalid) {
+@if(pokemonForm.invalid && isSubmit) {
 <div class="alert alert-danger">
   Veuillez corriger les erreurs avant de sauvegarder le Pokémon.
 </div>
-}}
+}
 
-<pre>{{ form.value | json }}</pre>
-{{ pokemonTypeList.errors | json }}
+<pre>{{ pokemonForm.value | json }}</pre>
+

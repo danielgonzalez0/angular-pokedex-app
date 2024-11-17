@@ -8,6 +8,18 @@
   margin-bottom: 40px;
 }
 
+.add-wrapper {;
+  padding-bottom: 50px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  .btn{
+    max-width: 250px;
+    padding: 20px;
+    text-transform: uppercase;
+  }
+}
+
 .form-group {
   display: flex;
   flex-direction: column;

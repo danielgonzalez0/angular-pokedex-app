@@ -13,6 +13,6 @@ login(name: string, password: string): Observable<boolean> {
     const isLoggedIn = name === 'Pikachu#' && password === 'Pikachu#';
     this._isLoggedIn.set(isLoggedIn);
 
-    return of(isLoggedIn).pipe(delay(1000));
+    return of(isLoggedIn).pipe(delay(1));
   }
 }

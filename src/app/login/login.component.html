@@ -1,4 +1,10 @@
 <div class="wrapper">
+  <pre>{{isLoading() | json}}</pre>
+  @if(isLoading()){
+  <div class="loader-wrapper">
+    <span class="loader"></span>
+  </div>
+  }@else{
   <div class="login-container">
     <h3>Page de connexion</h3>
     <p class="info">{{ message() }}</p>
@@ -36,4 +42,5 @@
       </div>
     </form>
   </div>
+  }
 </div>

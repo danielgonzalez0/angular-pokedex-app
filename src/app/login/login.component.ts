@@ -28,8 +28,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   onSubmit(event: Event) {
     event.preventDefault();
     this.message.set('Tentative de connexion en cours ...');
+    this.isLoading.set(true);
     this.checkauthentification(true);
     this.persistConnection();
+
   }
 
   persistConnection(): void {
@@ -46,6 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.name.set(id);
       this.password.set(mpd);
     }
+    this.isLoading.set(false);
   }
 
   checkauthentification(isOnSubmit: boolean): void {
@@ -62,12 +65,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
         this.isLoading.set(false);
         this.router.navigate(['/pokemons']);
-
       });
   }
 
   ngOnDestroy(): void {
     this.loginSubscription.unsubscribe();
-    this.isLoading.set(true);
   }
 }
